@@ -17,8 +17,7 @@ contactForm.addEventListener('submit', function(e) {
     const phone = document.getElementById('phone').value;
     const message = document.getElementById('message').value;
 
-    // You can add your form submission logic here
-    // For now, just show an alert
+    // Show success message
     alert(`Thank you ${name} for your message! We will contact you soon.`);
     
     // Reset form
@@ -76,3 +75,7 @@ document.querySelectorAll('section').forEach(section => {
     section.classList.add('fade-in');
     observer.observe(section);
 });
+
+// Update copyright year automatically
+document.querySelector('.footer-bottom p').innerHTML = 
+    `&copy; ${new Date().getFullYear()} Santosh General Order Suppliers. All rights reserved.`;
