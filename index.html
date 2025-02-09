@@ -19,6 +19,9 @@
                 <li><a href="#services">Repair Services</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
+            <div class="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
         </nav>
     </header>
 
@@ -26,40 +29,46 @@
         <section id="home" class="hero">
             <h2>Welcome to Santosh General Order Suppliers</h2>
             <p>Your one-stop shop for second-hand bikes and professional repair services</p>
+            <div class="hero-buttons">
+                <a href="#bikes" class="btn primary">View Bikes</a>
+                <a href="#contact" class="btn secondary">Contact Us</a>
+            </div>
         </section>
 
         <section id="bikes" class="bikes-section">
             <h2>Available Second-Hand Bikes</h2>
             <div class="bike-grid">
-                <!-- Bike Card Template -->
                 <div class="bike-card">
                     <div class="bike-image">
-                        <!-- Facebook image placeholder -->
-                        <div class="fb-image-placeholder">
-                            <i class="fas fa-image"></i>
-                            <p>Facebook Image</p>
-                        </div>
+                        <img src="https://via.placeholder.com/400x300" alt="Mountain Bike">
+                        <span class="bike-tag">Featured</span>
                     </div>
                     <div class="bike-details">
                         <h3>Mountain Bike</h3>
                         <p class="price">₹15,000</p>
                         <p class="description">Well-maintained mountain bike with 21 gears</p>
+                        <ul class="bike-features">
+                            <li><i class="fas fa-check"></i> 21 Speed Gears</li>
+                            <li><i class="fas fa-check"></i> Front Suspension</li>
+                            <li><i class="fas fa-check"></i> Disc Brakes</li>
+                        </ul>
                         <button class="enquiry-btn">Enquire Now</button>
                     </div>
                 </div>
 
-                <!-- Add more bike cards as needed -->
                 <div class="bike-card">
                     <div class="bike-image">
-                        <div class="fb-image-placeholder">
-                            <i class="fas fa-image"></i>
-                            <p>Facebook Image</p>
-                        </div>
+                        <img src="https://via.placeholder.com/400x300" alt="City Bike">
                     </div>
                     <div class="bike-details">
                         <h3>City Bike</h3>
                         <p class="price">₹12,000</p>
                         <p class="description">Perfect for daily commute</p>
+                        <ul class="bike-features">
+                            <li><i class="fas fa-check"></i> 7 Speed Gears</li>
+                            <li><i class="fas fa-check"></i> Comfortable Seat</li>
+                            <li><i class="fas fa-check"></i> Basket Included</li>
+                        </ul>
                         <button class="enquiry-btn">Enquire Now</button>
                     </div>
                 </div>
@@ -73,16 +82,31 @@
                     <i class="fas fa-wrench"></i>
                     <h3>Bike Repairs</h3>
                     <p>Professional repair service for all bike types</p>
+                    <ul class="service-features">
+                        <li>Full Service</li>
+                        <li>Brake Adjustment</li>
+                        <li>Gear Tuning</li>
+                    </ul>
                 </div>
                 <div class="service-card">
                     <i class="fas fa-shopping-cart"></i>
                     <h3>Buy Bikes</h3>
                     <p>Quality second-hand bikes at great prices</p>
+                    <ul class="service-features">
+                        <li>Verified Bikes</li>
+                        <li>Test Rides Available</li>
+                        <li>Warranty Options</li>
+                    </ul>
                 </div>
                 <div class="service-card">
                     <i class="fas fa-handshake"></i>
                     <h3>Sell Your Bike</h3>
                     <p>Get the best value for your used bike</p>
+                    <ul class="service-features">
+                        <li>Fair Evaluation</li>
+                        <li>Quick Payment</li>
+                        <li>All Brands Accepted</li>
+                    </ul>
                 </div>
             </div>
         </section>
@@ -95,20 +119,56 @@
                     <p><i class="fas fa-map-marker-alt"></i> Shop Address</p>
                     <p><i class="fas fa-phone"></i> +91 1234567890</p>
                     <p><i class="fas fa-envelope"></i> info@santoshbikes.com</p>
+                    <div class="business-hours">
+                        <h4>Business Hours</h4>
+                        <p>Monday - Saturday: 9:00 AM - 8:00 PM</p>
+                        <p>Sunday: 10:00 AM - 4:00 PM</p>
+                    </div>
                 </div>
-                <form id="contact-form">
-                    <input type="text" placeholder="Your Name" required>
-                    <input type="email" placeholder="Your Email" required>
-                    <input type="tel" placeholder="Your Phone" required>
-                    <textarea placeholder="Your Message" required></textarea>
-                    <button type="submit">Send Message</button>
+                <form id="contact-form" class="contact-form">
+                    <div class="form-group">
+                        <input type="text" id="name" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" id="phone" placeholder="Your Phone" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="message" placeholder="Your Message" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Send Message</button>
                 </form>
             </div>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2025 Santosh General Order Suppliers. All rights reserved.</p>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#bikes">Bikes</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Business Hours</h4>
+                <p>Monday - Saturday: 9:00 AM - 8:00 PM</p>
+                <p>Sunday: 10:00 AM - 4:00 PM</p>
+            </div>
+            <div class="footer-section">
+                <h4>Contact Info</h4>
+                <p><i class="fas fa-phone"></i> +91 1234567890</p>
+                <p><i class="fas fa-envelope"></i> info@santoshbikes.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Santosh General Order Suppliers. All rights reserved.</p>
+        </div>
     </footer>
 
     <script src="script.js"></script>
