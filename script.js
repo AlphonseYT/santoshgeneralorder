@@ -1,20 +1,49 @@
-// Form submission handling
-document.getElementById('contact-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    alert('Thank you for your message! We will get back to you soon.');
-    this.reset();
+// Mobile menu functionality
+const mobileMenuButton = document.querySelector('.mobile-menu');
+const navLinks = document.querySelector('.nav-links');
+
+mobileMenuButton.addEventListener('click', () => {
+    navLinks.classList.toggle('active');
 });
 
-// Enquiry button handling
+// Handle form submission
+const contactForm = document.getElementById('contact-form');
+contactForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Get form values
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const message = document.getElementById('message').value;
+
+    // You can add your form submission logic here
+    // For now, just show an alert
+    alert(`Thank you ${name} for your message! We will contact you soon.`);
+    
+    // Reset form
+    contactForm.reset();
+});
+
+// Handle enquiry buttons
 document.querySelectorAll('.enquiry-btn').forEach(button => {
     button.addEventListener('click', function() {
-        const bikeName = this.parentElement.querySelector('h3').textContent;
-        const bikePrice = this.parentElement.querySelector('.price').textContent;
-        alert(`Enquiry for ${bikeName} (${bikePrice})\nPlease use the contact form below to send us your enquiry.`);
+        const bikeCard = this.closest('.bike-details');
+        const bikeName = bikeCard.querySelector('h3').textContent;
+        const bikePrice = bikeCard.querySelector('.price').textContent;
+        
+        // Smooth scroll to contact form
+        document.querySelector('#contact').scrollIntoView({ 
+            behavior: 'smooth' 
+        });
+        
+        // Pre-fill message in contact form
+        const messageField = document.getElementById('message');
+        messageField.value = `I am interested in the ${bikeName} priced at ${bikePrice}. Please provide more information.`;
     });
 });
 
-// Smooth scrolling for navigation links
+// Smooth scrolling for all navigation links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
         e.preventDefault();
@@ -24,11 +53,13 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 behavior: 'smooth',
                 block: 'start'
             });
+            // Close mobile menu if open
+            navLinks.classList.remove('active');
         }
     });
 });
 
-// Add animation when scrolling to sections
+// Add fade-in animation for sections
 const observerOptions = {
     threshold: 0.1
 };
@@ -36,15 +67,12 @@ const observerOptions = {
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
+            entry.target.classList.add('visible');
         }
     });
 }, observerOptions);
 
 document.querySelectorAll('section').forEach(section => {
-    section.style.opacity = '0';
-    section.style.transform = 'translateY(20px)';
-    section.style.transition = 'all 0.5s ease-in-out';
+    section.classList.add('fade-in');
     observer.observe(section);
 });
