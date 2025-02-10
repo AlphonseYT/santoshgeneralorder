@@ -472,3 +472,31 @@ section h2 {
     color: #1a237e;
     font-size: 2rem;
 }
+/* Add these to your existing styles.css */
+
+/* Loading spinner styles */
+.loading-spinner {
+    display: inline-block;
+    margin-left: 8px;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Disable button styles */
+.submit-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/* Form validation styles */
+.contact-form input:invalid,
+.contact-form textarea:invalid {
+    border-color: #ff0000;
+}
+
+.contact-form input:valid,
+.contact-form textarea:valid {
+    border-color: #00ff00;
+}
