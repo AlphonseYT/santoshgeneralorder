@@ -7,15 +7,21 @@ document.addEventListener('DOMContentLoaded', function() {
         navLinks.classList.toggle('active');
     });
 
-    // Function to get formatted UTC timestamp
-    function getUTCTimestamp() {
+    // Function to get formatted timestamp in Nepal Time (UTC+05:45)
+    function getNepalTimestamp() {
         const now = new Date();
-        return now.getUTCFullYear() + '-' + 
-               String(now.getUTCMonth() + 1).padStart(2, '0') + '-' + 
-               String(now.getUTCDate()).padStart(2, '0') + ' ' + 
-               String(now.getUTCHours()).padStart(2, '0') + ':' + 
-               String(now.getUTCMinutes()).padStart(2, '0') + ':' + 
-               String(now.getUTCSeconds()).padStart(2, '0');
+        // Add 5 hours and 45 minutes to UTC to get Nepal Time
+        const nepalOffset = (5 * 60 + 45) * 60 * 1000; // 5 hours and 45 minutes in milliseconds
+        const nepalTime = new Date(now.getTime() + nepalOffset);
+        
+        const year = nepalTime.getUTCFullYear();
+        const month = String(nepalTime.getUTCMonth() + 1).padStart(2, '0');
+        const day = String(nepalTime.getUTCDate()).padStart(2, '0');
+        const hours = String(nepalTime.getUTCHours()).padStart(2, '0');
+        const minutes = String(nepalTime.getUTCMinutes()).padStart(2, '0');
+        const seconds = String(nepalTime.getUTCSeconds()).padStart(2, '0');
+        
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     }
 
     // Handle form submission
@@ -25,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const buttonText = submitButton?.querySelector('.btn-text');
 
     // Replace this with your Google Apps Script Web App URL
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxwv0GTm6Qg09kjwjYotDgBT6CpEvCDCABexVuzVTsjrTuT3UL_BBi2E1TKCj6QJphD/exec';
+    const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_SCRIPT_URL_HERE';
 
     if (contactForm) {
         contactForm.addEventListener('submit', async function(e) {
@@ -39,19 +45,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             // Get form values
-            const nameInput = document.getElementById('name');
-            const emailInput = document.getElementById('email');
-            const phoneInput = document.getElementById('phone');
-            const messageInput = document.getElementById('message');
-
             const formData = {
-                timestamp: getUTCTimestamp(),
-                name: nameInput ? nameInput.value : '',
-                email: emailInput && emailInput.value ? emailInput.value : 'Not provided',
-                phone: phoneInput ? phoneInput.value : '',
-                message: messageInput ? messageInput.value : '',
-                bikeInterest: messageInput && messageInput.value.includes('interested in') 
-                    ? messageInput.value.split('interested in')[1].split('priced at')[0].trim()
+                timestamp: getNepalTimestamp(), // Nepal Time (UTC+05:45)
+                name: document.getElementById('name')?.value || '',
+                email: document.getElementById('email')?.value || 'Not provided',
+                phone: document.getElementById('phone')?.value || '',
+                message: document.getElementById('message')?.value || '',
+                bikeInterest: document.getElementById('message')?.value.includes('interested in') 
+                    ? document.getElementById('message').value.split('interested in')[1].split('priced at')[0].trim()
                     : 'General Inquiry'
             };
 
