@@ -1,232 +1,81 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Mobile menu functionality
-    const mobileMenuButton = document.querySelector('.mobile-menu');
-    const navLinks = document.querySelector('.nav-links');
+// Function to get formatted timestamp in Nepal Time (UTC+05:45)
+function getNepalTimestamp() {
+    const now = new Date();
+    
+    // Get current time in UTC
+    const utcYear = now.getUTCFullYear();
+    const utcMonth = now.getUTCMonth();
+    const utcDay = now.getUTCDate();
+    const utcHours = now.getUTCHours();
+    const utcMinutes = now.getUTCMinutes();
+    const utcSeconds = now.getUTCSeconds();
+    
+    // Create new date object with UTC time
+    const nepalTime = new Date(Date.UTC(utcYear, utcMonth, utcDay, utcHours, utcMinutes, utcSeconds));
+    
+    // Add Nepal offset (5:45)
+    nepalTime.setTime(nepalTime.getTime() + ((5 * 60 + 45) * 60 * 1000));
+    
+    // Format the date
+    const year = nepalTime.getUTCFullYear();
+    const month = String(nepalTime.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(nepalTime.getUTCDate()).padStart(2, '0');
+    const hours = String(nepalTime.getUTCHours()).padStart(2, '0');
+    const minutes = String(nepalTime.getUTCMinutes()).padStart(2, '0');
+    const seconds = String(nepalTime.getUTCSeconds()).padStart(2, '0');
+    
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
 
-    mobileMenuButton.addEventListener('click', () => {
-        navLinks.classList.toggle('active');
-    });
-
-    // Function to get formatted timestamp in Nepal Time (UTC+05:45)
-    function getNepalTimestamp() {
-        const now = new Date();
-        // Add 5 hours and 45 minutes to UTC to get Nepal Time
-        const nepalOffset = (5 * 60 + 45) * 60 * 1000; // 5 hours and 45 minutes in milliseconds
-        const nepalTime = new Date(now.getTime() + nepalOffset);
+// Handle form submission
+if (contactForm) {
+    contactForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
         
-        const year = nepalTime.getUTCFullYear();
-        const month = String(nepalTime.getUTCMonth() + 1).padStart(2, '0');
-        const day = String(nepalTime.getUTCDate()).padStart(2, '0');
-        const hours = String(nepalTime.getUTCHours()).padStart(2, '0');
-        const minutes = String(nepalTime.getUTCMinutes()).padStart(2, '0');
-        const seconds = String(nepalTime.getUTCSeconds()).padStart(2, '0');
+        if (submitButton && loadingSpinner && buttonText) {
+            submitButton.disabled = true;
+            buttonText.textContent = 'Sending...';
+            loadingSpinner.classList.remove('hidden');
+        }
         
-        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-    }
+        // Get form values
+        const formData = {
+            timestamp: getNepalTimestamp(),
+            name: document.getElementById('name')?.value?.trim() || '',
+            email: document.getElementById('email')?.value?.trim() || 'Not provided',
+            phone: document.getElementById('phone')?.value?.trim() || '',
+            message: document.getElementById('message')?.value?.trim() || '',
+            bikeInterest: document.getElementById('message')?.value?.includes('interested in') 
+                ? document.getElementById('message').value.split('interested in')[1].split('priced at')[0].trim()
+                : 'General Inquiry'
+        };
 
-    // Handle form submission
-    const contactForm = document.getElementById('contact-form');
-    const submitButton = document.getElementById('submit-btn');
-    const loadingSpinner = submitButton?.querySelector('.loading-spinner');
-    const buttonText = submitButton?.querySelector('.btn-text');
-
-    // Replace this with your Google Apps Script Web App URL
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwAWGOt7LDjQTpk9AsMAhCw3h9IGTxsgZi1Ou2lTHc/dev';
-
-    if (contactForm) {
-        contactForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
+        try {
+            console.log('Sending data:', formData); // Debug log
             
+            const response = await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
+            
+            console.log('Response:', response); // Debug log
+            
+            alert('Thank you for your message! We will contact you soon.');
+            contactForm.reset();
+            
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Sorry, there was an error submitting your form. Please try again.');
+        } finally {
             if (submitButton && loadingSpinner && buttonText) {
-                // Disable submit button and show loading spinner
-                submitButton.disabled = true;
-                buttonText.textContent = 'Sending...';
-                loadingSpinner.classList.remove('hidden');
+                submitButton.disabled = false;
+                buttonText.textContent = 'Send Message';
+                loadingSpinner.classList.add('hidden');
             }
-            
-            // Get form values
-            const formData = {
-                timestamp: getNepalTimestamp(), // Nepal Time (UTC+05:45)
-                name: document.getElementById('name')?.value || '',
-                email: document.getElementById('email')?.value || 'Not provided',
-                phone: document.getElementById('phone')?.value || '',
-                message: document.getElementById('message')?.value || '',
-                bikeInterest: document.getElementById('message')?.value.includes('interested in') 
-                    ? document.getElementById('message').value.split('interested in')[1].split('priced at')[0].trim()
-                    : 'General Inquiry'
-            };
-
-            try {
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(formData)
-                });
-
-                // Show success message
-                alert('Thank you for your message! We will contact you soon.');
-                
-                // Reset form
-                contactForm.reset();
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Sorry, there was an error submitting your form. Please try again.');
-            } finally {
-                if (submitButton && loadingSpinner && buttonText) {
-                    // Re-enable submit button and hide loading spinner
-                    submitButton.disabled = false;
-                    buttonText.textContent = 'Send Message';
-                    loadingSpinner.classList.add('hidden');
-                }
-            }
-        });
-    }
-
-    // Handle enquiry buttons
-    document.querySelectorAll('.enquiry-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const bikeCard = this.closest('.bike-details');
-            const bikeName = bikeCard?.querySelector('h3')?.textContent || '';
-            const bikePrice = bikeCard?.querySelector('.price')?.textContent || '';
-            
-            const contactSection = document.querySelector('#contact');
-            if (contactSection) {
-                // Smooth scroll to contact form
-                contactSection.scrollIntoView({ 
-                    behavior: 'smooth' 
-                });
-            }
-            
-            // Pre-fill message in contact form
-            const messageField = document.getElementById('message');
-            if (messageField) {
-                messageField.value = `I am interested in the ${bikeName} priced at ${bikePrice}. Please provide more information.`;
-            }
-        });
-    });
-
-    // Smooth scrolling for all navigation links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-                // Close mobile menu if open
-                navLinks.classList.remove('active');
-            }
-        });
-    });
-
-    // Intersection Observer for fade-in animations
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            }
-        });
-    }, observerOptions);
-
-    document.querySelectorAll('section').forEach(section => {
-        section.classList.add('fade-in');
-        observer.observe(section);
-    });
-
-    // Update copyright year automatically
-    const footerCopyright = document.querySelector('.footer-bottom p');
-    if (footerCopyright) {
-        footerCopyright.innerHTML = `&copy; ${new Date().getFullYear()} Santosh General Order Suppliers. All rights reserved.`;
-    }
-
-    // Form validation
-    const inputs = document.querySelectorAll('.contact-form input, .contact-form textarea');
-    inputs.forEach(input => {
-        input.addEventListener('invalid', function(e) {
-            e.preventDefault();
-            this.classList.add('error');
-        });
-
-        input.addEventListener('input', function() {
-            if (this.classList.contains('error')) {
-                if (this.checkValidity()) {
-                    this.classList.remove('error');
-                }
-            }
-        });
-    });
-
-    // Phone number formatting
-    const phoneInput = document.getElementById('phone');
-    if (phoneInput) {
-        phoneInput.addEventListener('input', function(e) {
-            let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
-            e.target.value = !x[2] ? x[1] : 
-                            !x[3] ? `${x[1]}-${x[2]}` : 
-                            `${x[1]}-${x[2]}-${x[3]}`;
-        });
-    }
-
-    // Handle window resize for mobile menu
-    window.addEventListener('resize', () => {
-        if (window.innerWidth > 768) {
-            navLinks.classList.remove('active');
         }
     });
-
-    // Prevent form submission when pressing Enter in input fields
-    document.querySelectorAll('input').forEach(input => {
-        input.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                return false;
-            }
-        });
-    });
-
-    // Add loading state to Facebook link buttons
-    document.querySelectorAll('.facebook-link-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const originalContent = this.innerHTML;
-            this.style.opacity = '0.7';
-            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
-            
-            // Reset after 2 seconds (Facebook should load by then)
-            setTimeout(() => {
-                this.style.opacity = '1';
-                this.innerHTML = originalContent;
-            }, 2000);
-        });
-    });
-
-    // Add scroll to top button
-    const scrollTopButton = document.createElement('button');
-    scrollTopButton.innerHTML = '<i class="fas fa-arrow-up"></i>';
-    scrollTopButton.className = 'scroll-top-btn hidden';
-    document.body.appendChild(scrollTopButton);
-
-    window.addEventListener('scroll', () => {
-        if (window.pageYOffset > 300) {
-            scrollTopButton.classList.remove('hidden');
-        } else {
-            scrollTopButton.classList.add('hidden');
-        }
-    });
-
-    scrollTopButton.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
-});
+}
