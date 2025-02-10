@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const buttonText = submitButton?.querySelector('.btn-text');
 
     // Your Google Apps Script Web App URL
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxwv0GTm6Qg09kjwjYotDgBT6CpEvCDCABexVuzVTsjrTuT3UL_BBi2E1TKCj6QJphD/exec';
 
     if (contactForm) {
         contactForm.addEventListener('submit', async function(e) {
