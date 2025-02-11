@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://santoshsuppliers.com.np/sitemap.xml
