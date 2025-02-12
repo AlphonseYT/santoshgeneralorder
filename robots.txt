@@ -1,6 +1,6 @@
 User-agent: *
 Allow: /
-Sitemap: https://santoshgeneralorder.netlify.app/sitemap.xml
+Sitemap: https://www.santoshsuppliers.com.np/sitemap.xml
 
 # Block access to admin areas
 Disallow: /admin/
